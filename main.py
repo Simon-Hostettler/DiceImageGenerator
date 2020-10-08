@@ -27,6 +27,8 @@ def convert_to_dice_image(filename):
 
     dice_img.save('DiceImage.jpg', quality = 100)
     print("Done!")
+    print("In real life this image would measure:"
+          f" {int((1.6*NEW_IMG_HEIGHT*relative_size)/10)}cm x {int((1.6*NEW_IMG_HEIGHT/10))}cm.")
 
 
 def assign_dice_to_color(grey_value):
