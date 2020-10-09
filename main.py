@@ -5,6 +5,7 @@ import sys
 
 NEW_IMG_HEIGHT = 100
 NEW_IMG_NAME = "DiceImage.jpg"
+TEXT_FILE_NAME = "DiceArrangement.txt"
 
 dice = []
 for x in range(0, 6):
@@ -22,15 +23,25 @@ def convert_to_dice_image(filename):
     new_size = (int(NEW_IMG_HEIGHT * relative_size * 32) - 32, NEW_IMG_HEIGHT * 32)
     dice_img = Image.new('L', new_size, color='white')
 
-    with open("DiceArrangement.txt", "w") as f:
+    with open(TEXT_FILE_NAME, "w") as f:
         for row in range(0, NEW_IMG_HEIGHT):
+            last_dice = 0
+            dice_counter = 0
             line = ""
             for column in range(0, int(NEW_IMG_HEIGHT * relative_size)):
                 grey_val = pixel_matrix[row][column]
                 dice_number = assign_dice_to_color(grey_val)
                 dice_img.paste(dice[dice_number], (column*32, row*32))
-                line += str(f"{dice_number + 1}, ")
-            f.write(line[:-2] + "\n")
+
+                current_dice = dice_number + 1
+                if (current_dice != last_dice) and (dice_counter != 0):
+                    line += f"d{last_dice} x {dice_counter}, "
+                    dice_counter = 1
+                else:
+                    dice_counter += 1
+                last_dice = current_dice
+            line += f"d{last_dice} x {dice_counter}"
+            f.write(line + "\n")
 
     dice_img.save(NEW_IMG_NAME, quality=100)
     print("Done!")
