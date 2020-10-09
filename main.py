@@ -22,11 +22,15 @@ def convert_to_dice_image(filename):
     new_size = (int(NEW_IMG_HEIGHT * relative_size * 32) - 32, NEW_IMG_HEIGHT * 32)
     dice_img = Image.new('L', new_size, color='white')
 
-    for row in range(0, NEW_IMG_HEIGHT):
-        for column in range(0, int(NEW_IMG_HEIGHT * relative_size)):
-            grey_val = pixel_matrix[row][column]
-            die_face = assign_dice_to_color(grey_val)
-            dice_img.paste(die_face, (column*32, row*32))
+    with open("DiceArrangement.txt", "w") as f:
+        for row in range(0, NEW_IMG_HEIGHT):
+            line = ""
+            for column in range(0, int(NEW_IMG_HEIGHT * relative_size)):
+                grey_val = pixel_matrix[row][column]
+                dice_number = assign_dice_to_color(grey_val)
+                dice_img.paste(dice[dice_number], (column*32, row*32))
+                line += str(f"{dice_number + 1}, ")
+            f.write(line[:-2] + "\n")
 
     dice_img.save(NEW_IMG_NAME, quality=100)
     print("Done!")
@@ -35,7 +39,7 @@ def convert_to_dice_image(filename):
 
 
 def assign_dice_to_color(grey_value):
-    return dice[5-int(grey_value/45)]
+    return 5-int(grey_value/45)
 
 
 if __name__ == "__main__":
