@@ -39,6 +39,5 @@ def assign_dice_to_color(grey_value):
 
 
 if __name__ == "__main__":
-
     filename = askopenfilename()
     convert_to_dice_image(filename)
